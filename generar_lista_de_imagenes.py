@@ -33,8 +33,8 @@ def generar_lista_de_imagenes(carpeta):
         hora = re.search(r'\d{2}\.\d{2}\.\d{2}', archivo.name)
         current_file["hora"] = hora.group() if hora else None
 
-        lugar = re.findall(r'[A-Z]{3}', archivo)
-        current_file["lugar"] = lugar[0]
+        lugar = re.search(r'[A-Z]{3}', archivo.name)
+        current_file["lugar"] = lugar.group() if lugar else None
 
         lista_de_imagenes.append(current_file)
 
