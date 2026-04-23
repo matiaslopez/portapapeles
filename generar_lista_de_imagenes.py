@@ -1,5 +1,4 @@
 
-import os
 from pathlib import Path
 import re
 
@@ -22,23 +21,21 @@ def generar_lista_de_imagenes(carpeta):
     lista_de_imagenes = []
     curr_path = Path(carpeta)
 
-    for archivo in os.listdir(carpeta):
-        if archivo.endswith('.jpeg'):
-            current_file = {}
+    for archivo in curr_path.glob("*.jpeg"):
+        current_file = {}
 
-            current_file["nombre"] = archivo
-            path_absoluto = curr_path.resolve() / archivo
-            current_file["ruta"] = path_absoluto
+        current_file["nombre"] = archivo.name
+        current_file["ruta"] = archivo.resolve()
 
-            fecha = re.findall(r'\d{4}-\d{2}-\d{2}', archivo)
-            current_file["fecha"] = fecha[0]
+        fecha = re.search(r'\d{4}-\d{2}-\d{2}', archivo.name)
+        current_file["fecha"] = fecha.group() if fecha else None
 
-            hora = re.findall(r'\d{2}\.\d{2}\.\d{2}', archivo)
-            current_file["hora"] = hora[0]
+        hora = re.search(r'\d{2}\.\d{2}\.\d{2}', archivo.name)
+        current_file["hora"] = hora.group() if hora else None
 
-            lugar = re.findall(r'[A-Z]{3}', archivo)
-            current_file["lugar"] = lugar[0]
+        lugar = re.findall(r'[A-Z]{3}', archivo)
+        current_file["lugar"] = lugar[0]
 
-            lista_de_imagenes.append(current_file)
+        lista_de_imagenes.append(current_file)
 
     return lista_de_imagenes
