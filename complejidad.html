@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complejidad Algorítmica</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+    /* ── Tokens ──────────────────────────────────────────────── */
+    :root {
+      --bg:       #0f1117;
+      --surface:  #1a1d27;
+      --surface2: #22263a;
+      --border:   rgba(255,255,255,0.08);
+      --text:     #e8eaf0;
+      --muted:    #7c8099;
+      --accent:   #6c63ff;
+      --accent-d: #4e46cc;
+      --radius:   8px;
+      --grid:     rgba(255,255,255,0.06);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.25rem;
+    }
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+    }
+
+    /* ── Top toolbar ─────────────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Log toggle (styled checkbox) ───────────────────────── */
+    .log-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      user-select: none;
+      cursor: pointer;
+    }
+    .log-toggle-wrap input { display: none; }
+    .log-pill {
+      position: relative;
+      width: 42px; height: 22px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      transition: background 0.2s;
+    }
+    .log-pill::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: transform 0.2s, background 0.2s;
+    }
+    #logToggle:checked + .log-toggle-wrap .log-pill { background: var(--accent); border-color: var(--accent); }
+    #logToggle:checked + .log-toggle-wrap .log-pill::after { transform: translateX(20px); background: #fff; }
+    #logToggle:checked + .log-toggle-wrap { color: var(--text); }
+
+    #logToggle { display: none; }
+
+    /* ── Bulk buttons ────────────────────────────────────────── */
+    .btn {
+      font-size: 0.75rem;
+      padding: 4px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: var(--surface2); }
+
+    /* ── Range sliders ───────────────────────────────────────── */
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .range-row label { font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+    .range-row .val {
+      font-size: 0.8rem;
+      font-weight: 600;
+      min-width: 28px;
+      text-align: center;
+      color: var(--accent);
+    }
+    input[type=range] {
+      flex: 1;
+      min-width: 100px;
+      accent-color: var(--accent);
+      height: 4px;
+      cursor: pointer;
+    }
+
+    /* ── Checkboxes grid ─────────────────────────────────────── */
+    .cb-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      margin-bottom: 1rem;
+    }
+    .cb-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.8rem;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+    }
+    .cb-item input[type=checkbox] {
+      appearance: none;
+      width: 14px; height: 14px;
+      border-radius: 3px;
+      border: 1.5px solid var(--border);
+      background: var(--surface2);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .cb-item input[type=checkbox]:checked {
+      background: var(--cb-color, var(--accent));
+      border-color: var(--cb-color, var(--accent));
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l3 3 5-6' stroke='%23fff' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 9px;
+    }
+    .swatch {
+      width: 20px; height: 3px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── Chart wrapper ───────────────────────────────────────── */
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 420px;
+    }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      margin-top: 1.2rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Complejidad algorítmica</h1>
+<p class="subtitle">Comparativa de órdenes de crecimiento — activá/desactivá funciones y explorá el rango de <em>n</em></p>
+
+<div class="card">
+
+  <!-- toolbar: log toggle + bulk actions -->
+  <div class="toolbar">
+    <input type="checkbox" id="logToggle" checked onchange="setScaleFromToggle(this.checked)">
+    <label class="log-toggle-wrap" for="logToggle">
+      <span class="log-pill"></span>
+      <span id="scaleLabel">Escala logarítmica</span>
+    </label>
+    <div style="margin-left:auto; display:flex; gap:6px;">
+      <button class="btn" onclick="toggleAll(true)">Activar todas</button>
+      <button class="btn" onclick="toggleAll(false)">Desactivar todas</button>
+    </div>
+  </div>
+
+  <!-- n range -->
+  <div class="range-row">
+    <label>n desde</label>
+    <span class="val" id="nmin-out">2</span>
+    <input type="range" id="nmin" min="2" max="49" value="2" step="1" oninput="updateRange()">
+    <label>hasta</label>
+    <input type="range" id="nmax" min="3" max="50" value="19" step="1" oninput="updateRange()">
+    <span class="val" id="nmax-out">19</span>
+  </div>
+
+  <!-- function checkboxes -->
+  <div class="cb-grid" id="cb-grid"></div>
+
+  <!-- chart -->
+  <div class="chart-wrap">
+    <canvas id="chart" role="img" aria-label="Gráfico de complejidad algorítmica"></canvas>
+  </div>
+
+</div>
+
+<footer>Sugerencias/mejoras para la visualización son bienvenidas.</footer>
+
+<script>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   CONFIGURACIÓN INICIAL — editá esto para cambiar el estado
+   de arranque de la página.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const INITIAL_STATE = {
+  nFrom:      2,      // valor mínimo de n
+  nTo:        19,     // valor máximo de n
+  logScale:   true,   // true = logarítmica, false = lineal
+  active: {
+    'O(1)':       true,
+    'O(log n)':   true,
+    'O(√n)':      true,
+    'O(n)':       true,
+    'O(n log n)': true,
+    'O(n²)':      true,
+    'O(n³)':      true,
+    'O(2ⁿ)':      true,
+    'O(3ⁿ)':      true,
+    'O(n!)':      true,
+  }
+};
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+const FUNCS = [
+  { label: 'O(1)',       color: '#1fba8a', dash: [],        fn: () => 1 },
+  { label: 'O(log n)',   color: '#4fa8e8', dash: [6,2],     fn: x => Math.log2(x) },
+  { label: 'O(√n)',      color: '#9b8ff5', dash: [4,4],     fn: x => Math.sqrt(x) },
+  { label: 'O(n)',       color: '#f5b731', dash: [],        fn: x => x },
+  { label: 'O(n log n)', color: '#f07040', dash: [6,2],     fn: x => x * Math.log2(x) },
+  { label: 'O(n²)',      color: '#e0608a', dash: [4,4],     fn: x => x ** 2 },
+  { label: 'O(n³)',      color: '#c44040', dash: [8,3,2,3], fn: x => x ** 3 },
+  { label: 'O(2ⁿ)',      color: '#7c5ce8', dash: [6,2],     fn: x => 2 ** x },
+  { label: 'O(3ⁿ)',      color: '#d4860f', dash: [4,4],     fn: x => 3 ** x },
+  { label: 'O(n!)',      color: '#8a8fa8', dash: [8,3],     fn: x => { let r=1; for(let i=2;i<=x;i++) r*=i; return r; } },
+];
+
+function buildN(from, to) {
+  return Array.from({ length: to - from + 1 }, (_, i) => i + from);
+}
+
+/* ── Checkboxes ─────────────────────────────────────────────── */
+const cbGrid = document.getElementById('cb-grid');
+FUNCS.forEach((f, i) => {
+  const lbl = document.createElement('label');
+  lbl.className = 'cb-item';
+  lbl.style.setProperty('--cb-color', f.color);
+  const checked = INITIAL_STATE.active[f.label] !== false ? 'checked' : '';
+  lbl.innerHTML = `
+    <input type="checkbox" ${checked} data-idx="${i}" onchange="toggleFn(${i}, this.checked)">
+    <span class="swatch" style="background:${f.color}"></span>
+    <span>${f.label}</span>`;
+  cbGrid.appendChild(lbl);
+});
+
+/* ── Chart init ─────────────────────────────────────────────── */
+let nArr = buildN(INITIAL_STATE.nFrom, INITIAL_STATE.nTo);
+
+const datasets = FUNCS.map((f, i) => ({
+  label:           f.label,
+  data:            nArr.map(f.fn),
+  borderColor:     f.color,
+  backgroundColor: f.color + '18',
+  borderWidth:     2,
+  borderDash:      f.dash,
+  pointRadius:     2.5,
+  pointHoverRadius:5,
+  tension:         0.3,
+  hidden:          INITIAL_STATE.active[f.label] === false,
+}));
+
+const textColor  = '#b0b4c8';
+const gridColor  = 'rgba(255,255,255,0.06)';
+
+const chart = new Chart(document.getElementById('chart'), {
+  type: 'line',
+  data: { labels: nArr, datasets },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a1d27',
+        borderColor: 'rgba(255,255,255,0.12)',
+        borderWidth: 1,
+        titleColor: '#e8eaf0',
+        bodyColor: '#b0b4c8',
+        padding: 10,
+        callbacks: {
+          label: ctx => {
+            const v = ctx.raw;
+            if (v == null) return '';
+            const fmt = v >= 1e9 ? v.toExponential(2)
+                      : v >= 1000 ? Math.round(v).toLocaleString('es')
+                      : v < 1    ? v.toFixed(3)
+                      :             v.toFixed(2);
+            return `  ${ctx.dataset.label}: ${fmt}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        type: 'category',
+        ticks: { color: textColor, maxTicksLimit: 12 },
+        title: { display: true, text: 'n', color: textColor, font: { size: 13 } },
+        grid: { color: gridColor },
+      },
+      y: {
+        type: INITIAL_STATE.logScale ? 'logarithmic' : 'linear',
+        min:  INITIAL_STATE.logScale ? 0.5 : 0,
+        ticks: {
+          color: textColor,
+          callback: yTickFmt,
+        },
+        title: {
+          display: true,
+          text: INITIAL_STATE.logScale ? 'f(n)  (log)' : 'f(n)',
+          color: textColor,
+          font: { size: 13 }
+        },
+        grid: { color: gridColor },
+      }
+    }
+  }
+});
+
+/* seed UI from initial state */
+document.getElementById('nmin').value = INITIAL_STATE.nFrom;
+document.getElementById('nmax').value = INITIAL_STATE.nTo;
+document.getElementById('nmin-out').textContent = INITIAL_STATE.nFrom;
+document.getElementById('nmax-out').textContent = INITIAL_STATE.nTo;
+document.getElementById('logToggle').checked = INITIAL_STATE.logScale;
+document.getElementById('scaleLabel').textContent = INITIAL_STATE.logScale ? 'Escala logarítmica' : 'Escala lineal';
+
+/* ── Helpers ────────────────────────────────────────────────── */
+//function yTickFmt(v) {
+//  if (chart.options.scales.y.type === 'logarithmic') {
+//    const marks = [1,10,100,1e3,1e6,1e9,1e12,1e15,1e18,1e21,1e24,1e27,1e30];
+//    return marks.includes(v) ? (v >= 1e6 ? v.toExponential(0) : v.toLocaleString('es')) : '';
+//  }
+//  return v >= 1e6 ? v.toExponential(0) : v.toLocaleString('es');
+//}
+// function yTickFmt(v, index, ticks) {
+//   const scale = this;
+
+//   if (scale.type === 'logarithmic') {
+//     const marks = [1,10,100,1e3,1e6,1e9,1e12,1e15,1e18,1e21,1e24,1e27,1e30];
+//     return marks.includes(v)
+//       ? (v >= 1e6 ? v.toExponential(0) : v.toLocaleString('es'))
+//       : '';
+//   }
+
+//   return v >= 1e6 ? v.toExponential(0) : v.toLocaleString('es');
+// }
+
+function yTickFmt(v) {
+  if (this.type === 'logarithmic') {
+    return v.toExponential(0);
+  }
+  return v.toLocaleString('es');
+}
+
+
+function updateRange() {
+  let lo = parseInt(document.getElementById('nmin').value);
+  let hi = parseInt(document.getElementById('nmax').value);
+  if (lo >= hi) {
+    if (document.activeElement === document.getElementById('nmin')) lo = hi - 1;
+    else hi = lo + 1;
+    document.getElementById('nmin').value = lo;
+    document.getElementById('nmax').value = hi;
+  }
+  document.getElementById('nmin-out').textContent = lo;
+  document.getElementById('nmax-out').textContent = hi;
+  nArr = buildN(lo, hi);
+  chart.data.labels = nArr;
+  FUNCS.forEach((f, i) => { chart.data.datasets[i].data = nArr.map(f.fn); });
+  chart.update('none');
+}
+
+function setScaleFromToggle(isLog) {
+  chart.options.scales.y.type  = isLog ? 'logarithmic' : 'linear';
+  chart.options.scales.y.min   = isLog ? 0.5 : 0;
+  chart.options.scales.y.title.text = isLog ? 'f(n)  (log)' : 'f(n)';
+  chart.options.scales.y.ticks = { color: textColor, callback: yTickFmt };
+  document.getElementById('scaleLabel').textContent = isLog ? 'Escala logarítmica' : 'Escala lineal';
+  chart.update();
+}
+
+function toggleFn(idx, val) {
+  chart.data.datasets[idx].hidden = !val;
+  chart.update();
+}
+
+function toggleAll(val) {
+  chart.data.datasets.forEach(ds => ds.hidden = !val);
+  document.querySelectorAll('#cb-grid input[type=checkbox]').forEach(cb => cb.checked = val);
+  chart.update();
+}
+</script>
+</body>
+</html>
