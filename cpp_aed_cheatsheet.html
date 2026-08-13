@@ -110,7 +110,12 @@ body {
 }
 
 /* ── Code ───────────────────────────────────────────── */
-pre, code { font-family: var(--font-code); }
+pre, code, td.mono, .page-tag {
+  font-family: var(--font-code);
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0, "dlig" 0;
+  -webkit-font-feature-settings: "liga" 0, "calt" 0, "dlig" 0;
+}
 pre {
   background: #fff;
   border-left: 2.5px solid var(--primary-mid);
@@ -145,7 +150,9 @@ th {
   padding: 3px 5.5px;
   text-align: left;
 }
-td { padding: 2.6px 5.5px; border-bottom: 1px solid #DCE6EA; vertical-align: top; background: #fff; }
+td { padding: 2.6px 5.5px; border-bottom: 1px solid #DCE6EA; vertical-align: top; background: #fff; word-break: break-word; }
+table.op-table { table-layout: fixed; }
+table.op-table col.op-col { width: 15%; }
 tr:last-child td { border-bottom: none; }
 td.mono { font-family: var(--font-code); font-size: 7.9px; }
 td code { font-size: 7.9px; }
@@ -171,7 +178,7 @@ td code { font-size: 7.9px; }
 <div class="page">
   <div class="page-header">
     <h1>C++ · Referencia Rápida</h1>
-    <span class="subtitle">Cara A — Tipos · Variables · Referencias · Operadores · Casteo · Control · Funciones · E/S · Matemáticas</span>
+    <span class="subtitle">Cara A — Tipos · Variables · Referencias · Operadores · Casteo · Estructuras de control · Funciones</span>
     <span class="page-tag">FRENTE</span>
   </div>
 
@@ -231,25 +238,6 @@ p  = nullptr;  // puntero nulo (seguro)</pre>
       </div>
     </div>
 
-    <!-- OPERADORES -->
-    <div class="section">
-      <div class="sh"><span class="sh-title">Operadores</span><span class="sh-desc"> — expresiones</span></div>
-      <div class="section-body">
-        <div class="label">Aritméticos</div>
-        <pre>+  -  *  /  %
-x++; ++x;  x--; --x;      // post/pre
-x+=5; x-=2; x*=3; x/=4;</pre>
-        <div class="label">División entera vs. real</div>
-        <pre>7 / 2      // → 3   (int ÷ int)
-7.0 / 2    // → 3.5</pre>
-        <div class="label">Relacionales / lógicos</div>
-        <pre>==  !=  &lt;  &gt;  &lt;=  &gt;=
-&amp;&amp;  ||  !        // and, or, not</pre>
-        <div class="label">Ternario</div>
-        <pre>int a = (x >= 0) ? x : -x;</pre>
-      </div>
-    </div>
-
     <!-- CASTEO -->
     <div class="section">
       <div class="sh"><span class="sh-title">Casteo</span><span class="sh-desc"> — conversión</span></div>
@@ -264,6 +252,57 @@ int    t = (int) 3.99;   // truncado: 3</pre>
         <pre>#include &lt;cstdlib&gt;
 int i = atoi("42"); double f = atof("3.14");</pre>
         <div class="note">El cast nunca redondea: siempre trunca hacia cero.</div>
+      </div>
+    </div>
+
+    <!-- OPERADORES -->
+    <div class="section col-span-2">
+      <div class="sh"><span class="sh-title">Operadores</span><span class="sh-desc"> — aritméticos, relacionales y lógicos, con su significado</span></div>
+      <div class="section-body">
+        <div class="two-col">
+          <div>
+            <div class="label">Aritméticos</div>
+            <table class="op-table">
+              <colgroup><col class="op-col"><col></colgroup>
+              <tr><th>Op.</th><th>Significado</th></tr>
+              <tr><td class="mono">+</td><td>suma</td></tr>
+              <tr><td class="mono">-</td><td>resta</td></tr>
+              <tr><td class="mono">*</td><td>multiplicación</td></tr>
+              <tr><td class="mono">/</td><td>división</td></tr>
+              <tr><td class="mono">%</td><td>módulo (resto)</td></tr>
+            </table>
+            <div class="label" style="margin-top:2px">Incremento y asignación compuesta</div>
+            <pre>x++;  ++x;   // post- / pre-incremento (x = x+1)
+x--;  --x;   // post- / pre-decremento (x = x-1)
+x+=5; x-=2; x*=3; x/=4; x%=2;</pre>
+            <div class="label" style="margin-top:2px">División entera vs. real</div>
+            <pre>7 / 2      // → 3   (int ÷ int, trunca)
+7.0 / 2    // → 3.5</pre>
+          </div>
+          <div>
+            <div class="label">Relacionales — comparan dos valores</div>
+            <table class="op-table">
+              <colgroup><col class="op-col"><col></colgroup>
+              <tr><th>Op.</th><th>Significado</th></tr>
+              <tr><td class="mono">==</td><td>igual a</td></tr>
+              <tr><td class="mono">!=</td><td>distinto de</td></tr>
+              <tr><td class="mono">&lt;</td><td>menor que</td></tr>
+              <tr><td class="mono">&gt;</td><td>mayor que</td></tr>
+              <tr><td class="mono">&lt;=</td><td>menor o igual que</td></tr>
+              <tr><td class="mono">&gt;=</td><td>mayor o igual que</td></tr>
+            </table>
+            <div class="label" style="margin-top:2px">Lógicos — combinan condiciones booleanas</div>
+            <table class="op-table">
+              <colgroup><col class="op-col"><col></colgroup>
+              <tr><th>Op.</th><th>Significado</th></tr>
+              <tr><td class="mono">&amp;&amp;</td><td>Y (AND) — verdadero si <b>ambos</b> son verdaderos</td></tr>
+              <tr><td class="mono">||</td><td>O (OR) — verdadero si <b>alguno</b> es verdadero</td></tr>
+              <tr><td class="mono">!</td><td>NO (NOT) — invierte verdadero↔falso</td></tr>
+            </table>
+            <div class="label" style="margin-top:2px">Ternario</div>
+            <pre>int a = (x >= 0) ? x : -x;  // cond ? siVerdadero : siFalso</pre>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -303,37 +342,8 @@ while (cin &gt;&gt; x) { }  // hasta EOF</pre>
       </div>
     </div>
 
-    <!-- E/S CONSOLA -->
-    <div class="section">
-      <div class="sh"><span class="sh-title">E/S consola</span><span class="sh-desc"> — &lt;iostream&gt;</span></div>
-      <div class="section-body">
-        <div class="label">Salida</div>
-        <pre>cout &lt;&lt; "x = " &lt;&lt; x &lt;&lt; "\n";
-cout &lt;&lt; a &lt;&lt; " " &lt;&lt; b &lt;&lt; endl;</pre>
-        <div class="label">Entrada</div>
-        <pre>int n;      cin &gt;&gt; n;
-string s;   cin &gt;&gt; s;       // 1 palabra
-getline(cin, s);            // línea completa
-cin &gt;&gt; a &gt;&gt; b;             // varios valores</pre>
-        <div class="note"><code>endl</code> limpia el buffer; en loops preferir <code>"\n"</code>.</div>
-      </div>
-    </div>
-
-    <!-- MATEMÁTICAS -->
-    <div class="section">
-      <div class="sh"><span class="sh-title">Matemáticas</span><span class="sh-desc"> — &lt;cmath&gt;</span></div>
-      <div class="section-body">
-        <pre>sqrt(x)   pow(base,exp)   abs(x)
-floor(x)  ceil(x)   round(x)
-log(x)  log2(x)  log10(x)
-sin(x) cos(x)     // x en radianes
-M_PI              // π ≈ 3.14159…</pre>
-        <div class="note"><code>pow()</code> devuelve <code>double</code>.</div>
-      </div>
-    </div>
-
     <!-- FUNCIONES -->
-    <div class="section col-span-3">
+    <div class="section col-span-4">
       <div class="sh"><span class="sh-title">Funciones</span><span class="sh-desc"> — declaración, prototipos y modos de paso de parámetros</span></div>
       <div class="section-body">
         <div class="three-col">
@@ -392,7 +402,7 @@ porPtr(&amp;n);       // n = 20 (pasar dirección)</pre>
 <div class="page">
   <div class="page-header">
     <h1>C++ · Referencia Rápida</h1>
-    <span class="subtitle">Cara B — Arrays estáticos y 2D · Punteros en profundidad · Memoria dinámica (heap) · Strings</span>
+    <span class="subtitle">Cara B — Arrays estáticos y 2D · Punteros en profundidad · Memoria dinámica (heap) · Strings · E/S consola · Matemáticas</span>
     <span class="page-tag">DORSO</span>
   </div>
 
@@ -532,6 +542,68 @@ s.find("mun");    // índice donde empieza, o
             <pre>to_string(42);               // int → string
 stoi("42");  stod("3.14");   // string → número</pre>
             <div class="note" style="margin-top:1px"><code>string::npos</code> = valor devuelto por <code>find</code> cuando no se encontró la subcadena.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E/S CONSOLA -->
+    <div class="section col-span-2">
+      <div class="sh"><span class="sh-title">E/S consola</span><span class="sh-desc"> — &lt;iostream&gt;</span></div>
+      <div class="section-body">
+        <div class="two-col">
+          <div>
+            <div class="label">Salida — cout</div>
+            <pre>cout &lt;&lt; "x = " &lt;&lt; x &lt;&lt; "\n";
+cout &lt;&lt; a &lt;&lt; " " &lt;&lt; b &lt;&lt; endl;
+
+#include &lt;iomanip&gt;
+cout &lt;&lt; fixed &lt;&lt; setprecision(2);
+cout &lt;&lt; 3.14159;        // → 3.14</pre>
+            <div class="note"><code>endl</code> limpia el buffer; en loops preferir <code>"\n"</code>.</div>
+          </div>
+          <div>
+            <div class="label">Entrada — cin / getline</div>
+            <pre>int n;      cin &gt;&gt; n;
+string s;   cin &gt;&gt; s;        // 1 palabra (hasta espacio)
+getline(cin, s);              // línea completa
+cin &gt;&gt; a &gt;&gt; b;                // varios valores</pre>
+            <div class="label" style="margin-top:2px">Mezclar cin >> con getline</div>
+            <pre>int n;  cin &gt;&gt; n;       // deja el '\n' pendiente
+cin.ignore();            // lo descarta
+getline(cin, s);         // ahora sí lee bien</pre>
+            <div class="note">Error clásico: tras <code>cin &gt;&gt; n</code>, un <code>getline</code> lee una línea vacía si no se hace antes <code>cin.ignore()</code>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATEMÁTICAS -->
+    <div class="section col-span-2">
+      <div class="sh"><span class="sh-title">Matemáticas</span><span class="sh-desc"> — &lt;cmath&gt; y números aleatorios</span></div>
+      <div class="section-body">
+        <div class="two-col">
+          <div>
+            <div class="label">Funciones — &lt;cmath&gt;</div>
+            <pre>sqrt(x)            // raíz cuadrada
+pow(base, exp)     // potencia → double
+abs(x)  fabs(x)    // valor absoluto (int / double)
+floor(x) ceil(x) round(x)
+log(x) log2(x) log10(x)
+sin(x) cos(x) tan(x)   // x en radianes
+M_PI                    // π ≈ 3.14159…</pre>
+            <div class="note"><code>pow()</code> siempre devuelve <code>double</code>, incluso con enteros.</div>
+          </div>
+          <div>
+            <div class="label">Ejemplo — distancia entre 2 puntos</div>
+            <pre>double dx = x2 - x1, dy = y2 - y1;
+double dist = sqrt(dx*dx + dy*dy);
+// equivale a sqrt(pow(dx,2) + pow(dy,2))</pre>
+            <div class="label" style="margin-top:2px">Números aleatorios — &lt;cstdlib&gt; &lt;ctime&gt;</div>
+            <pre>srand(time(0));         // "semilla", 1 vez en main
+int x = rand() % 100;    // entero en [0, 99]
+int d = 1 + rand() % 6;  // dado: entero en [1, 6]</pre>
+            <div class="note">Sin <code>srand()</code>, <code>rand()</code> devuelve siempre la misma secuencia de números.</div>
           </div>
         </div>
       </div>
