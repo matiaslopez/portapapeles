@@ -4,26 +4,23 @@
 <meta charset="UTF-8">
 <title>C++ — Referencia Rápida · AED</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:      #F6F4F0;
-  --surface: #FFFFFF;
-  --border:  #D9D6CE;
-  --text:    #1A1A1A;
-  --muted:   #6A6760;
-  --code-bg: #ECEAE5;
+  --page-bg: #DDDBD6;
+  --paper:   #FAFAF9;
+  --frame:   #17232B;
 
-  --a1: #7B9EA8;
-  --a2: #8A9E7B;
-  --a3: #A8907B;
-  --a4: #9B8AAE;
-  --a5: #7B9E98;
-  --a6: #A8A07B;
-  --a7: #A87B8A;
-  --a8: #7B8AA8;
+  --primary:      #163A52;   /* header sólido de sección */
+  --primary-mid:  #2E6E8E;   /* labels, borde de código, th */
+  --primary-soft: #5C93AC;   /* detalles menores */
+  --tint:    #E7EFF3;        /* fondo de sección */
+  --tint-2:  #D7E4EA;        /* fondo de th / franjas */
+
+  --ink:   #1A1A1A;
+  --muted: #57636B;
 
   --font-ui:   'Inter', system-ui, sans-serif;
   --font-code: 'JetBrains Mono', 'Courier New', monospace;
@@ -31,17 +28,17 @@
 
 body {
   font-family: var(--font-ui);
-  font-size: 8.5px;
-  line-height: 1.45;
-  color: var(--text);
-  background: #DDDBD6;
+  font-size: 9.5px;
+  line-height: 1.46;
+  color: var(--ink);
+  background: var(--page-bg);
 }
 
 /* ── Page: A4 landscape ─────────────────────────────── */
 .page {
   width: 297mm;
   height: 210mm;
-  background: var(--bg);
+  background: var(--paper);
   margin: 10px auto;
   box-shadow: 0 2px 18px rgba(0,0,0,.18);
   display: flex;
@@ -49,41 +46,38 @@ body {
   overflow: hidden;
 }
 
-/* ── Header ─────────────────────────────────────────── */
+/* ── Header / Footer ────────────────────────────────── */
 .page-header {
-  background: #272727;
+  background: var(--frame);
   color: #fff;
-  padding: 5.5px 13px 5px;
+  padding: 7px 15px 6.5px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-bottom: 3px solid var(--accent-color, #7B9EA8);
+  gap: 12px;
+  border-bottom: 3px solid var(--primary-mid);
   flex-shrink: 0;
 }
-.page-header h1 {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: -.3px;
-  white-space: nowrap;
-}
-.page-header .subtitle {
+.page-header h1 { font-size: 14px; font-weight: 700; letter-spacing: -.3px; white-space: nowrap; }
+.page-header .subtitle { font-size: 8.6px; color: #9FB4BF; flex: 1; }
+.page-header .page-tag { font-family: var(--font-code); font-size: 7.8px; color: #7C8D96; white-space: nowrap; }
+
+.page-footer {
+  background: var(--frame);
+  color: #7C8D96;
   font-size: 7.5px;
-  color: #AAA;
-  flex: 1;
-}
-.page-header .page-tag {
-  font-family: var(--font-code);
-  font-size: 7px;
-  color: #888;
-  white-space: nowrap;
+  padding: 3px 15px;
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
 }
 
-/* ── 4-column grid ──────────────────────────────────── */
+/* ── Grid ───────────────────────────────────────────── */
 .cols {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  padding: 8px;
+  grid-auto-rows: min-content;
+  gap: 9px;
+  padding: 9px;
   flex: 1;
   align-content: start;
   overflow: hidden;
@@ -92,125 +86,78 @@ body {
 .col-span-3 { grid-column: span 3; }
 .col-span-4 { grid-column: span 4; }
 
-/* ── Section ────────────────────────────────────────── */
+/* ── Section (estilo "flat", header sólido + fondo tinte) ── */
 .section {
-  background: var(--surface);
-  border-radius: 4px;
-  border: 1px solid var(--border);
+  background: var(--tint);
+  border-radius: 3px;
   overflow: hidden;
   break-inside: avoid;
   page-break-inside: avoid;
 }
-.section-header {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3.5px 6px;
-  background: #EEECEA;
-  border-bottom: 1px solid var(--border);
+.sh {
+  background: var(--primary);
+  color: #fff;
+  padding: 5px 9px;
+  line-height: 1.32;
 }
-.section-accent {
-  width: 3px;
-  height: 15px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-.section-eyebrow {
-  font-size: 6px;
-  font-weight: 700;
-  letter-spacing: .8px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.section-title {
-  font-size: 8.5px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.2;
-}
+.sh-title { font-size: 10.2px; font-weight: 700; }
+.sh-desc  { font-size: 8.2px; font-weight: 400; color: #B9CFDA; }
 .section-body {
-  padding: 5px 6px;
+  padding: 6.5px 9px 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5.5px;
 }
 
 /* ── Code ───────────────────────────────────────────── */
-pre, code {
-  font-family: var(--font-code);
-  font-size: 7.4px;
-}
+pre, code { font-family: var(--font-code); }
 pre {
-  background: var(--code-bg);
-  border-radius: 3px;
-  padding: 4px 6px;
+  background: #fff;
+  border-left: 2.5px solid var(--primary-mid);
+  border-radius: 0 3px 3px 0;
+  padding: 5px 8px;
+  font-size: 7.8px;
   white-space: pre;
   overflow: hidden;
-  line-height: 1.55;
-  border-left: 2.5px solid var(--border);
+  line-height: 1.62;
 }
+code { font-size: 7.8px; background: #fff; padding: 0 2px; border-radius: 2px; }
 
 /* ── Typography helpers ─────────────────────────────── */
-.note {
-  font-size: 7px;
-  color: var(--muted);
-  line-height: 1.4;
-}
+.note { font-size: 7.5px; color: var(--muted); line-height: 1.45; }
 .label {
-  font-size: 6.5px;
+  font-size: 7.2px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .5px;
-  color: var(--muted);
+  letter-spacing: .45px;
+  color: var(--primary-mid);
 }
 
 /* ── Table ──────────────────────────────────────────── */
-table { width: 100%; border-collapse: collapse; font-size: 7.4px; }
+table { width: 100%; border-collapse: collapse; font-size: 8.1px; }
 th {
-  background: #ECEAE4;
+  background: var(--tint-2);
+  color: var(--primary);
   font-weight: 700;
-  font-size: 6.5px;
-  letter-spacing: .4px;
+  font-size: 7.2px;
+  letter-spacing: .3px;
   text-transform: uppercase;
-  padding: 2.5px 5px;
+  padding: 3px 5.5px;
   text-align: left;
-  border-bottom: 1px solid var(--border);
 }
-td {
-  padding: 2px 5px;
-  border-bottom: 1px solid #EEECE8;
-  vertical-align: top;
-}
+td { padding: 2.6px 5.5px; border-bottom: 1px solid #DCE6EA; vertical-align: top; background: #fff; }
 tr:last-child td { border-bottom: none; }
-tr:nth-child(even) td { background: #FAFAF8; }
-td.mono { font-family: var(--font-code); font-size: 7.2px; }
-td code { font-size: 7.2px; }
+td.mono { font-family: var(--font-code); font-size: 7.9px; }
+td code { font-size: 7.9px; }
 
-/* ── Inner 2-col layout ─────────────────────────────── */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-
-/* ── Footer ─────────────────────────────────────────── */
-.page-footer {
-  background: #272727;
-  color: #777;
-  font-size: 6.5px;
-  padding: 2.5px 13px;
-  display: flex;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
+/* ── Inner layouts ──────────────────────────────────── */
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 9px; }
 
 /* ── Print ──────────────────────────────────────────── */
 @media print {
   body { background: white; }
-  .page {
-    width: 297mm;
-    height: 210mm;
-    margin: 0;
-    box-shadow: none;
-    page-break-after: always;
-  }
+  .page { width: 297mm; height: 210mm; margin: 0; box-shadow: none; page-break-after: always; }
   .page:last-child { page-break-after: auto; }
   @page { margin: 0; size: A4 landscape; }
 }
@@ -219,84 +166,66 @@ td code { font-size: 7.2px; }
 <body>
 
 <!-- ════════════════════════════════════════════════════
-     CARA A — Tipos · Variables · Operadores · Casteo
+     CARA A — Fundamentos del lenguaje
 ════════════════════════════════════════════════════ -->
 <div class="page">
-  <div class="page-header" style="--accent-color:var(--a1)">
+  <div class="page-header">
     <h1>C++ · Referencia Rápida</h1>
-    <span class="subtitle">Cara A — Tipos de datos · Variables · Punteros · Referencias · Operadores · Casteo</span>
-    <span class="page-tag">HOJA 1 · FRENTE</span>
+    <span class="subtitle">Cara A — Tipos · Variables · Referencias · Operadores · Casteo · Control · Funciones · E/S · Matemáticas</span>
+    <span class="page-tag">FRENTE</span>
   </div>
 
   <div class="cols">
 
     <!-- TIPOS DE DATOS -->
     <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a1)"></div>
-        <div>
-          <div class="section-eyebrow">Primitivos</div>
-          <div class="section-title">Tipos de datos</div>
-        </div>
-      </div>
+      <div class="sh"><span class="sh-title">Tipos de datos</span><span class="sh-desc"> — primitivos</span></div>
       <div class="section-body">
         <table>
           <tr><th>Tipo</th><th>Tam.</th><th>Rango / Nota</th></tr>
           <tr><td class="mono">int</td><td>4 B</td><td>−2³¹ … 2³¹−1</td></tr>
           <tr><td class="mono">long long</td><td>8 B</td><td>−2⁶³ … 2⁶³−1</td></tr>
           <tr><td class="mono">unsigned int</td><td>4 B</td><td>0 … 2³²−1</td></tr>
-          <tr><td class="mono">float</td><td>4 B</td><td>~7 dígitos sig.</td></tr>
-          <tr><td class="mono">double</td><td>8 B</td><td>~15 dígitos sig.</td></tr>
-          <tr><td class="mono">bool</td><td>1 B</td><td><code>true</code> / <code>false</code></td></tr>
-          <tr><td class="mono">char</td><td>1 B</td><td>Un carácter ASCII</td></tr>
-          <tr><td class="mono">void</td><td>—</td><td>Sin valor de retorno</td></tr>
+          <tr><td class="mono">float</td><td>4 B</td><td>~7 díg. sig.</td></tr>
+          <tr><td class="mono">double</td><td>8 B</td><td>~15 díg. sig.</td></tr>
+          <tr><td class="mono">bool</td><td>1 B</td><td><code>true</code>/<code>false</code></td></tr>
+          <tr><td class="mono">char</td><td>1 B</td><td>un carácter</td></tr>
         </table>
-        <div class="label" style="margin-top:2px">Declaración e inicialización</div>
+        <div class="label">Declaración</div>
         <pre>int    n = 42;
 double pi = 3.14159;
-bool   ok = true;
-char   c  = 'A';      // comillas simples
-const  int MAX = 100; // no modificable</pre>
-        <div class="note">En C++ toda variable debe declararse con su tipo. El tipo no cambia durante la ejecución.</div>
+char   c  = 'A';       // comillas simples
+const  int MAX = 100;  // no modificable</pre>
       </div>
     </div>
 
     <!-- VARIABLES, PUNTEROS Y REFERENCIAS -->
     <div class="section col-span-2">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a2)"></div>
-        <div>
-          <div class="section-eyebrow">Memoria</div>
-          <div class="section-title">Variables · Punteros · Referencias</div>
-        </div>
-      </div>
+      <div class="sh"><span class="sh-title">Variables · Punteros · Referencias</span><span class="sh-desc"> — memoria</span></div>
       <div class="section-body">
         <div class="two-col">
           <div>
             <div class="label">Referencia — alias permanente</div>
             <pre>int x = 10;
-int& r = x;  // r ES x, no una copia
-r = 20;      // x ahora vale 20
-
-// Uso típico: parámetro de función
-void f(int& val) { val = 0; }</pre>
-            <div class="label" style="margin-top:3px">Puntero — guarda una dirección</div>
+int&amp; r = x;   // r ES x, no una copia
+r = 20;       // x ahora vale 20
+void f(int&amp; val) { val = 0; }  // en func.</pre>
+            <div class="label" style="margin-top:2px">Puntero — guarda una dirección</div>
             <pre>int  x = 10;
-int* p = &x;   // & = "dirección de x"
+int* p = &amp;x;   // &amp; = "dirección de x"
 *p = 30;       // * = "valor en p"
 p  = nullptr;  // puntero nulo (seguro)</pre>
           </div>
           <div>
-            <div class="label">Referencia vs Puntero</div>
+            <div class="label">Referencia vs. puntero</div>
             <table>
-              <tr><th></th><th>Referencia</th><th>Puntero</th></tr>
-              <tr><td>Nulidad</td><td>no puede ser nula</td><td><code>nullptr</code></td></tr>
-              <tr><td>Reasignación</td><td>no (fija al crear)</td><td>sí</td></tr>
+              <tr><th></th><th>Ref.</th><th>Puntero</th></tr>
+              <tr><td>Nulidad</td><td>no</td><td><code>nullptr</code></td></tr>
+              <tr><td>Reasignación</td><td>no</td><td>sí</td></tr>
               <tr><td>Aritmética</td><td>no</td><td>sí (<code>p++</code>)</td></tr>
-              <tr><td>Acceso</td><td>igual que variable</td><td><code>*p</code></td></tr>
-              <tr><td>Uso típico</td><td>parámetros</td><td>estructuras dinámicas</td></tr>
+              <tr><td>Uso típico</td><td>parámetros</td><td>estr. dinámicas</td></tr>
             </table>
-            <div class="note" style="margin-top:3px">Un puntero no inicializado apunta a memoria aleatoria. Siempre asignar <code>nullptr</code> o una dirección válida antes de usar.</div>
+            <div class="note" style="margin-top:2px">Un puntero no inicializado apunta a memoria aleatoria: asignar siempre <code>nullptr</code> o una dirección válida.</div>
           </div>
         </div>
       </div>
@@ -304,328 +233,145 @@ p  = nullptr;  // puntero nulo (seguro)</pre>
 
     <!-- OPERADORES -->
     <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a3)"></div>
-        <div>
-          <div class="section-eyebrow">Expresiones</div>
-          <div class="section-title">Operadores</div>
-        </div>
-      </div>
+      <div class="sh"><span class="sh-title">Operadores</span><span class="sh-desc"> — expresiones</span></div>
       <div class="section-body">
         <div class="label">Aritméticos</div>
-        <pre>+    -    *    /    %
-x++;   ++x;   // post / pre incremento
-x--;   --x;
-x += 5;  x -= 2;  x *= 3;  x /= 4;</pre>
-        <div class="label">División: entera vs real</div>
+        <pre>+  -  *  /  %
+x++; ++x;  x--; --x;      // post/pre
+x+=5; x-=2; x*=3; x/=4;</pre>
+        <div class="label">División entera vs. real</div>
         <pre>7 / 2      // → 3   (int ÷ int)
-7.0 / 2    // → 3.5
-7 / 2.0    // → 3.5</pre>
-        <div class="label">Relacionales y lógicos</div>
-        <pre>==   !=   <   >   <=   >=
-&&   ||   !           // and, or, not</pre>
+7.0 / 2    // → 3.5</pre>
+        <div class="label">Relacionales / lógicos</div>
+        <pre>==  !=  &lt;  &gt;  &lt;=  &gt;=
+&amp;&amp;  ||  !        // and, or, not</pre>
         <div class="label">Ternario</div>
-        <pre>int abs_x = (x >= 0) ? x : -x;</pre>
+        <pre>int a = (x >= 0) ? x : -x;</pre>
       </div>
     </div>
 
     <!-- CASTEO -->
     <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a4)"></div>
-        <div>
-          <div class="section-eyebrow">Conversión de tipos</div>
-          <div class="section-title">Casteo</div>
-        </div>
-      </div>
+      <div class="sh"><span class="sh-title">Casteo</span><span class="sh-desc"> — conversión</span></div>
       <div class="section-body">
-        <div class="label">Implícito (automático)</div>
-        <pre>int    n = 3;
-double d = n;   // int → double, sin pérdida
-int    x = 3.9; // double → int: x = 3 ⚠</pre>
-        <div class="label">Explícito estilo C</div>
-        <pre>double res = (double) n / 2;  // → 1.5
-int truncado = (int) 3.99;    // → 3
-int neg      = (int) -3.99;   // → -3</pre>
-        <div class="label">Estilo C++ (preferido)</div>
-        <pre>double res = static_cast&lt;double&gt;(n) / 2;</pre>
-        <div class="label">Desde string de texto</div>
+        <div class="label">Implícito</div>
+        <pre>double d = 3;    // int→double, sin pérdida
+int    x = 3.9;  // double→int: x = 3 ⚠</pre>
+        <div class="label">Explícito (estilo C++)</div>
+        <pre>double r = static_cast&lt;double&gt;(n) / 2;
+int    t = (int) 3.99;   // truncado: 3</pre>
+        <div class="label">Desde texto</div>
         <pre>#include &lt;cstdlib&gt;
-int    i = atoi("42");      // → 42
-double f = atof("3.14");    // → 3.14</pre>
+int i = atoi("42"); double f = atof("3.14");</pre>
         <div class="note">El cast nunca redondea: siempre trunca hacia cero.</div>
       </div>
     </div>
 
-    <!-- OPERACIONES MATEMATICAS -->
-    <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a5)"></div>
-        <div>
-          <div class="section-eyebrow">#include &lt;cmath&gt;</div>
-          <div class="section-title">Operaciones matemáticas</div>
-        </div>
-      </div>
+    <!-- ESTRUCTURAS DE CONTROL -->
+    <div class="section col-span-2">
+      <div class="sh"><span class="sh-title">Estructuras de control</span><span class="sh-desc"> — if / for / while</span></div>
       <div class="section-body">
-        <pre>sqrt(x)          // raíz cuadrada
-pow(base, exp)   // potencia  → double
-abs(x)           // |x| para int
-fabs(x)          // |x| para double
-floor(x)         // redondea hacia abajo
-ceil(x)          // redondea hacia arriba
-round(x)         // redondea al más cercano
-log(x)           // logaritmo natural (base e)
-log2(x)          // logaritmo base 2
-log10(x)         // logaritmo base 10
-sin(x) cos(x)    // x en radianes
-M_PI             // constante π ≈ 3.14159…</pre>
-        <div class="label">Ejemplo</div>
-        <pre>double h = sqrt(pow(a, 2) + pow(b, 2));</pre>
-        <div class="note"><code>pow()</code> devuelve <code>double</code>. Para enteros usar multiplicación directa cuando sea posible.</div>
+        <div class="three-col">
+          <div>
+            <div class="label">if / else if / else</div>
+            <pre>if (x > 0) {
+  cout &lt;&lt; "pos";
+} else if (x == 0) {
+  cout &lt;&lt; "cero";
+} else {
+  cout &lt;&lt; "neg";
+}</pre>
+            <div class="note">Llaves obligatorias si el cuerpo tiene &gt;1 línea. Usarlas siempre.</div>
+          </div>
+          <div>
+            <div class="label">for</div>
+            <pre>for (int i=0; i&lt;n; i++) { }
+for (int i=n-1; i>=0; i--) { } // atrás
+
+break;     // sale del bucle
+continue;  // siguiente iteración</pre>
+          </div>
+          <div>
+            <div class="label">while</div>
+            <pre>int i = 0;
+while (i &lt; n) { i++; }
+
+while (cin &gt;&gt; x) { }  // hasta EOF</pre>
+            <div class="note">Usar <code>while</code> cuando no se conoce la cantidad de iteraciones de antemano.</div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- E/S CONSOLA -->
     <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a6)"></div>
-        <div>
-          <div class="section-eyebrow">#include &lt;iostream&gt;</div>
-          <div class="section-title">Entrada / Salida — consola</div>
-        </div>
-      </div>
+      <div class="sh"><span class="sh-title">E/S consola</span><span class="sh-desc"> — &lt;iostream&gt;</span></div>
       <div class="section-body">
         <div class="label">Salida</div>
-        <pre>cout &lt;&lt; "Hola mundo" &lt;&lt; endl;
-cout &lt;&lt; "x = " &lt;&lt; x &lt;&lt; "\n";
-cout &lt;&lt; a &lt;&lt; " " &lt;&lt; b &lt;&lt; "\n";</pre>
+        <pre>cout &lt;&lt; "x = " &lt;&lt; x &lt;&lt; "\n";
+cout &lt;&lt; a &lt;&lt; " " &lt;&lt; b &lt;&lt; endl;</pre>
         <div class="label">Entrada</div>
-        <pre>int n;
-cin &gt;&gt; n;           // lee un valor
-
-string s;
-cin &gt;&gt; s;           // una palabra (hasta espacio)
-getline(cin, s);    // línea completa
-
-int a, b;
-cin &gt;&gt; a &gt;&gt; b;      // varios valores</pre>
-        <div class="note"><code>endl</code> limpia el buffer además de saltar línea. En loops preferir <code>"\n"</code>. Agregar <code>using namespace std;</code> al inicio para no escribir <code>std::</code>.</div>
+        <pre>int n;      cin &gt;&gt; n;
+string s;   cin &gt;&gt; s;       // 1 palabra
+getline(cin, s);            // línea completa
+cin &gt;&gt; a &gt;&gt; b;             // varios valores</pre>
+        <div class="note"><code>endl</code> limpia el buffer; en loops preferir <code>"\n"</code>.</div>
       </div>
     </div>
 
-    <!-- INCLUSIÓN DE BIBLIOTECAS -->
+    <!-- MATEMÁTICAS -->
     <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a7)"></div>
-        <div>
-          <div class="section-eyebrow">Preprocesador</div>
-          <div class="section-title">Inclusión de bibliotecas</div>
-        </div>
-      </div>
+      <div class="sh"><span class="sh-title">Matemáticas</span><span class="sh-desc"> — &lt;cmath&gt;</span></div>
       <div class="section-body">
-        <div class="label">Bibliotecas del sistema</div>
-        <pre>#include &lt;iostream&gt;  // cin, cout
-#include &lt;cmath&gt;     // sqrt, pow, abs…
-#include &lt;cstdlib&gt;   // atoi, atof
-#include &lt;fstream&gt;   // ifstream, ofstream
-#include &lt;string&gt;    // string, getline
-#include &lt;cassert&gt;   // assert()</pre>
-        <div class="label">Archivos propios</div>
-        <pre>#include "mi_modulo.h"  // comillas = relativo</pre>
-        <div class="note">Ángulos <code>&lt;&gt;</code> para el sistema · comillas <code>""</code> para archivos del proyecto.</div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="page-footer">
-    <span>Algoritmos y Estructuras de Datos · C++ · Referencia Rápida</span>
-    <span>Hoja 1 · Frente (Cara A)</span>
-  </div>
-</div>
-
-
-<!-- ════════════════════════════════════════════════════
-     CARA B — Control de flujo · Funciones
-════════════════════════════════════════════════════ -->
-<div class="page">
-  <div class="page-header" style="--accent-color:var(--a2)">
-    <h1>C++ · Referencia Rápida</h1>
-    <span class="subtitle">Cara B — Estructuras de control · Funciones: declaración, paso por valor y referencia, prototipos</span>
-    <span class="page-tag">HOJA 1 · DORSO</span>
-  </div>
-
-  <div class="cols">
-
-    <!-- IF / ELSE -->
-    <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a1)"></div>
-        <div>
-          <div class="section-eyebrow">Condicional</div>
-          <div class="section-title">if / else if / else</div>
-        </div>
-      </div>
-      <div class="section-body">
-        <pre>if (x > 0) {
-  cout &lt;&lt; "positivo";
-} else if (x == 0) {
-  cout &lt;&lt; "cero";
-} else {
-  cout &lt;&lt; "negativo";
-}</pre>
-        <div class="label">Anidado</div>
-        <pre>if (a > 0) {
-  if (b > 0) {
-    // a y b positivos
-  }
-}</pre>
-        <div class="note">Las llaves <code>{}</code> son obligatorias si el cuerpo tiene más de una línea. Recomendable usarlas siempre.</div>
-      </div>
-    </div>
-
-    <!-- FOR -->
-    <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a2)"></div>
-        <div>
-          <div class="section-eyebrow">Iteración</div>
-          <div class="section-title">Bucle for</div>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="label">Forma clásica</div>
-        <pre>for (int i = 0; i &lt; n; i++) {
-  // i de 0 a n-1
-}</pre>
-        <div class="label">Hacia atrás</div>
-        <pre>for (int i = n-1; i >= 0; i--) { }</pre>
-        <div class="label">Recorrer array</div>
-        <pre>int arr[5] = {1,2,3,4,5};
-for (int i = 0; i &lt; 5; i++) {
-  cout &lt;&lt; arr[i] &lt;&lt; " ";
-}</pre>
-        <div class="label">Control</div>
-        <pre>break;     // sale del bucle
-continue;  // siguiente iteración</pre>
-      </div>
-    </div>
-
-    <!-- WHILE -->
-    <div class="section">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a3)"></div>
-        <div>
-          <div class="section-eyebrow">Iteración</div>
-          <div class="section-title">Bucle while</div>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="label">while — evalúa antes de entrar</div>
-        <pre>int i = 0;
-while (i &lt; n) {
-  // cuerpo
-  i++;
-}</pre>
-        <div class="label">Leer hasta EOF</div>
-        <pre>int x;
-while (cin &gt;&gt; x) {
-  // procesa x
-}</pre>
-        <div class="label">Leer hasta centinela</div>
-        <pre>int x;
-cin &gt;&gt; x;
-while (x != -1) {
-  // procesa x
-  cin &gt;&gt; x;
-}</pre>
-        <div class="note">Diferencia con <code>for</code>: usar <code>while</code> cuando no se conoce la cantidad de iteraciones de antemano.</div>
+        <pre>sqrt(x)   pow(base,exp)   abs(x)
+floor(x)  ceil(x)   round(x)
+log(x)  log2(x)  log10(x)
+sin(x) cos(x)     // x en radianes
+M_PI              // π ≈ 3.14159…</pre>
+        <div class="note"><code>pow()</code> devuelve <code>double</code>.</div>
       </div>
     </div>
 
     <!-- FUNCIONES -->
-    <div class="section col-span-4">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a4)"></div>
-        <div>
-          <div class="section-eyebrow">Subprogramas</div>
-          <div class="section-title">Funciones — declaración, definición, prototipos y modos de paso</div>
-        </div>
-      </div>
+    <div class="section col-span-3">
+      <div class="sh"><span class="sh-title">Funciones</span><span class="sh-desc"> — declaración, prototipos y modos de paso de parámetros</span></div>
       <div class="section-body">
-        <div class="two-col" style="grid-template-columns: 1fr 1fr 1fr 1fr; gap: 7px;">
+        <div class="three-col">
           <div>
             <div class="label">Estructura básica</div>
-            <pre>// Prototipo (declara antes de usar)
+            <pre>// Prototipo (si se usa antes de definir)
 int suma(int a, int b);
 
-// Definición
-int suma(int a, int b) {
-  return a + b;
-}
+int suma(int a, int b) { return a+b; }
 
-// Sin retorno
 void saludar(string nombre) {
-  cout &lt;&lt; "Hola " &lt;&lt; nombre &lt;&lt; endl;
+  cout &lt;&lt; "Hola " &lt;&lt; nombre;
 }
 
-// Llamada
-int r = suma(3, 4);  // r = 7
+int r = suma(3, 4);   // r = 7
 saludar("Ana");</pre>
           </div>
           <div>
-            <div class="label">Paso por valor — recibe una copia</div>
-            <pre>void duplicar_mal(int x) {
-  x = x * 2;  // modifica la copia
-}             // el original NO cambia
+            <div class="label">Por valor / referencia / puntero</div>
+            <pre>void porValor(int x)      { x = x*2; }  // copia
+void porRef(int&amp; x)       { x = x*2; }  // modifica
+void porPtr(int* p)       { *p = *p*2; }
+void porConstRef(const string&amp; s) { }  // sin copia
 
 int n = 5;
-duplicar_mal(n);
-// n sigue siendo 5</pre>
-            <div class="label" style="margin-top:3px">Paso por referencia — opera sobre el original</div>
-            <pre>void duplicar(int& x) {
-  x = x * 2;  // modifica el original
-}
-
-int n = 5;
-duplicar(n);
-// n = 10</pre>
-          </div>
-          <div>
-            <div class="label">Paso por puntero — equivalente</div>
-            <pre>void duplicar_p(int* p) {
-  *p = (*p) * 2;
-}
-
-int n = 5;
-duplicar_p(&n);  // pasar dirección
-// n = 10</pre>
-            <div class="label" style="margin-top:3px">const referencia — sin copiar, sin modificar</div>
-            <pre>// Eficiente para datos grandes
-void mostrar(const int& x) {
-  cout &lt;&lt; x;
-  // x = 1; ← error de compilación
-}</pre>
+porRef(n);        // n = 10
+porPtr(&amp;n);       // n = 20 (pasar dirección)</pre>
           </div>
           <div>
             <div class="label">Cuándo usar cada uno</div>
             <table>
-              <tr><th>Modo</th><th>Modifica original</th><th>Uso típico</th></tr>
-              <tr><td>valor</td><td>no</td><td>tipos simples (int, double…)</td></tr>
-              <tr><td>referencia <code>&</code></td><td>sí</td><td>modificar variable</td></tr>
-              <tr><td>const ref <code>const &</code></td><td>no</td><td>leer structs/strings grandes</td></tr>
-              <tr><td>puntero <code>*</code></td><td>sí</td><td>estructuras dinámicas, null válido</td></tr>
+              <tr><th>Modo</th><th>Mod.</th><th>Uso típico</th></tr>
+              <tr><td>valor</td><td>no</td><td>tipos simples</td></tr>
+              <tr><td>ref <code>&amp;</code></td><td>sí</td><td>modificar variable</td></tr>
+              <tr><td>const <code>&amp;</code></td><td>no</td><td>structs/strings grandes</td></tr>
+              <tr><td>puntero <code>*</code></td><td>sí</td><td>estr. dinámicas, null válido</td></tr>
             </table>
-            <div class="label" style="margin-top:4px">Retornar múltiples valores</div>
-            <pre>// Usando referencias de salida
-void minmax(int arr[], int n,
-            int& mn, int& mx) {
-  mn = mx = arr[0];
-  for (int i=1; i&lt;n; i++) {
-    if (arr[i]&lt;mn) mn=arr[i];
-    if (arr[i]&gt;mx) mx=arr[i];
-  }
-}</pre>
+            <div class="note" style="margin-top:2px">Toda función puede tener varios parámetros de salida usando referencias.</div>
           </div>
         </div>
       </div>
@@ -635,118 +381,82 @@ void minmax(int arr[], int n,
 
   <div class="page-footer">
     <span>Algoritmos y Estructuras de Datos · C++ · Referencia Rápida</span>
-    <span>Hoja 1 · Dorso (Cara B)</span>
+    <span>Cara A</span>
   </div>
 </div>
 
 
 <!-- ════════════════════════════════════════════════════
-     CARA C — Arrays · Punteros · Memoria dinámica
+     CARA B — Arrays · Punteros · Memoria dinámica · Strings
 ════════════════════════════════════════════════════ -->
 <div class="page">
-  <div class="page-header" style="--accent-color:var(--a5)">
+  <div class="page-header">
     <h1>C++ · Referencia Rápida</h1>
-    <span class="subtitle">Cara C — Arrays estáticos y 2D · Punteros en profundidad · Memoria dinámica (heap)</span>
-    <span class="page-tag">HOJA 2 · FRENTE</span>
+    <span class="subtitle">Cara B — Arrays estáticos y 2D · Punteros en profundidad · Memoria dinámica (heap) · Strings</span>
+    <span class="page-tag">DORSO</span>
   </div>
 
   <div class="cols">
 
     <!-- ARRAYS ESTATICOS -->
     <div class="section col-span-2">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a3)"></div>
-        <div>
-          <div class="section-eyebrow">Colecciones de tamaño fijo</div>
-          <div class="section-title">Arrays estáticos</div>
-        </div>
-      </div>
+      <div class="sh"><span class="sh-title">Arrays estáticos</span><span class="sh-desc"> — colecciones de tamaño fijo</span></div>
       <div class="section-body">
         <div class="two-col">
           <div>
             <div class="label">Declaración e inicialización</div>
-            <pre>int arr[5];                   // sin init (basura)
+            <pre>int arr[5];                    // sin init (basura)
 int arr[5] = {1, 2, 3, 4, 5};
-int arr[]  = {1, 2, 3};      // tamaño inferido: 3
-int zeros[10] = {};          // todo en 0
-
-// El tamaño DEBE ser constante
-const int N = 100;
-int datos[N];</pre>
-            <div class="label" style="margin-top:3px">Recorrido y acceso</div>
-            <pre>arr[0];        // primer elemento (índice base 0)
-arr[n-1];      // último elemento
-
-for (int i = 0; i &lt; 5; i++)
-  cout &lt;&lt; arr[i] &lt;&lt; " ";</pre>
+int arr[]  = {1, 2, 3};       // tamaño inferido: 3
+int zeros[10] = {};           // todo en 0
+const int N = 100;  int datos[N];  // tam. constante</pre>
+            <div class="label" style="margin-top:2px">Recorrido y acceso</div>
+            <pre>arr[0];    arr[n-1];   // primero / último
+for (int i = 0; i &lt; 5; i++) cout &lt;&lt; arr[i] &lt;&lt; " ";</pre>
           </div>
           <div>
             <div class="label">Arrays 2D (matrices)</div>
-            <pre>int mat[3][4];         // 3 filas, 4 columnas
+            <pre>int mat[3][4];               // 3 filas, 4 columnas
 int mat[2][3] = { {1,2,3}, {4,5,6} };
-
-// Acceso: mat[fila][columna]
-mat[0][0] = 1;
-
-// Recorrido
-for (int i = 0; i &lt; 3; i++)
-  for (int j = 0; j &lt; 4; j++)
-    cout &lt;&lt; mat[i][j] &lt;&lt; " ";</pre>
-            <div class="label" style="margin-top:3px">Pasar array a función</div>
-            <pre>// El tamaño hay que pasarlo aparte
-void llenar(int arr[], int n) {
-  for (int i=0; i&lt;n; i++) arr[i]=0;
-}
-// El array siempre se pasa por referencia
-// (el nombre es un puntero al primer elem.)</pre>
+mat[0][0] = 1;                // fila, columna
+for (int i=0;i&lt;3;i++)
+  for (int j=0;j&lt;4;j++) cout &lt;&lt; mat[i][j];</pre>
+            <div class="label" style="margin-top:2px">Pasar a función</div>
+            <pre>void llenar(int arr[], int n) {   // tamaño aparte
+  for (int i=0;i&lt;n;i++) arr[i]=0;
+}  // el array siempre se pasa por referencia</pre>
           </div>
         </div>
-        <div class="note">Los arrays no guardan su propio tamaño. Sin control de límites: acceder fuera del rango es comportamiento indefinido.</div>
+        <div class="note">Los arrays no guardan su tamaño ni controlan límites: acceder fuera de rango es comportamiento indefinido.</div>
       </div>
     </div>
 
     <!-- PUNTEROS -->
     <div class="section col-span-2">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a4)"></div>
-        <div>
-          <div class="section-eyebrow">Direcciones de memoria</div>
-          <div class="section-title">Punteros — operaciones</div>
-        </div>
-      </div>
+      <div class="sh"><span class="sh-title">Punteros — operaciones</span><span class="sh-desc"> — direcciones de memoria</span></div>
       <div class="section-body">
         <div class="two-col">
           <div>
             <div class="label">Operadores fundamentales</div>
             <pre>int  x = 10;
-int* p = &x;    // & = dirección de x
-                // p guarda esa dirección
+int* p = &amp;x;    // &amp; = dirección de x
 *p = 20;        // * = valor en la dirección
-                // equivale a x = 20
-
-cout &lt;&lt; p;      // imprime dirección (hex)
-cout &lt;&lt; *p;     // imprime 20  (desreferencia)</pre>
-            <div class="label" style="margin-top:3px">Puntero a struct</div>
-            <pre>Nodo  m;    m.dato = 5;   // var. normal → .
-Nodo* p = &m;
-p->dato;                  // puntero → ->
-(*p).dato;                // equivalente (feo)</pre>
+cout &lt;&lt; p;      // dirección (hex)
+cout &lt;&lt; *p;     // 20  (desreferencia)</pre>
+            <div class="label" style="margin-top:2px">Puntero a struct</div>
+            <pre>Nodo  m;  m.dato = 5;    // variable normal → .
+Nodo* p = &amp;m;
+p->dato;                  // puntero → -></pre>
           </div>
           <div>
             <div class="label">Aritmética de punteros</div>
             <pre>int arr[] = {10, 20, 30, 40};
 int* p = arr;    // apunta a arr[0]
 p++;             // avanza sizeof(int) bytes
-cout &lt;&lt; *p;      // 20  (arr[1])
-cout &lt;&lt; *(p+1);  // 30  (arr[2])
-
-// arr[i] es equivalente a *(arr + i)
-// El nombre del array ES un puntero</pre>
-            <div class="label" style="margin-top:3px">Puntero a puntero</div>
-            <pre>int   x = 5;
-int*  p = &x;
-int** pp = &p;   // puntero a puntero
-
+cout &lt;&lt; *p;      // 20 (arr[1])
+// arr[i] equivale a *(arr + i)</pre>
+            <div class="label" style="margin-top:2px">Puntero a puntero</div>
+            <pre>int x = 5;  int* p = &amp;x;  int** pp = &amp;p;
 cout &lt;&lt; **pp;    // 5</pre>
           </div>
         </div>
@@ -754,71 +464,74 @@ cout &lt;&lt; **pp;    // 5</pre>
     </div>
 
     <!-- MEMORIA DINAMICA -->
-    <div class="section col-span-4">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a5)"></div>
-        <div>
-          <div class="section-eyebrow">Heap — asignación en tiempo de ejecución</div>
-          <div class="section-title">Memoria dinámica — new / delete</div>
-        </div>
-      </div>
+    <div class="section col-span-2">
+      <div class="sh"><span class="sh-title">Memoria dinámica</span><span class="sh-desc"> — heap, <code style="background:transparent;color:#B9CFDA">new</code> / <code style="background:transparent;color:#B9CFDA">delete</code></span></div>
       <div class="section-body">
-        <div class="two-col" style="grid-template-columns: 1fr 1fr 1fr 1fr; gap: 7px;">
+        <div class="two-col">
           <div>
-            <div class="label">Variable individual</div>
-            <pre>// Alocar
-int* p = new int;
-*p = 42;
+            <div class="label">Variable y array dinámico</div>
+            <pre>int* p = new int;       *p = 42;
+int* p2 = new int(42);      // alocar + init
+delete p;  p = nullptr;     // liberar (obligatorio)
 
-// Alocar e inicializar
-int* p = new int(42);
-
-// Liberar (obligatorio)
-delete p;
-p = nullptr;  // buena práctica</pre>
-          </div>
-          <div>
-            <div class="label">Array dinámico</div>
-            <pre>int n;
-cin &gt;&gt; n;
-
-// Tamaño conocido en runtime
-int* arr = new int[n];
-
-arr[0] = 10;   // usar como array normal
-for (int i=0; i&lt;n; i++) arr[i] = i;
-
-// Liberar (delete[] para arrays)
-delete[] arr;
-arr = nullptr;</pre>
+int n;  cin &gt;&gt; n;
+int* arr = new int[n];      // tamaño en runtime
+for (int i=0;i&lt;n;i++) arr[i]=i;
+delete[] arr;  arr = nullptr;  // delete[] p/arrays</pre>
           </div>
           <div>
             <div class="label">Struct en heap (nodo típico)</div>
-            <pre>struct Nodo {
-  int   dato;
-  Nodo* sig;
-};
+            <pre>struct Nodo { int dato; Nodo* sig; };
 
 Nodo* n = new Nodo;
-n->dato = 5;
-n->sig  = nullptr;
+n->dato = 5;  n->sig = nullptr;
+delete n;  n = nullptr;</pre>
+            <table style="margin-top:2px">
+              <tr><th>new</th><th></th><th>delete</th></tr>
+              <tr><td class="mono">new T</td><td>→</td><td class="mono">delete p</td></tr>
+              <tr><td class="mono">new T[n]</td><td>→</td><td class="mono">delete[] p</td></tr>
+            </table>
+            <div class="note" style="margin-top:2px"><b>Leak:</b> olvidar <code>delete</code>. <b>Doble free:</b> liberar dos veces. <b>Dangling:</b> usar el puntero tras liberarlo — asignar <code>nullptr</code> ayuda a detectarlo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-// Al terminar:
-delete n;
-n = nullptr;</pre>
+    <!-- STRINGS -->
+    <div class="section col-span-2">
+      <div class="sh"><span class="sh-title">Strings</span><span class="sh-desc"> — &lt;string&gt;</span></div>
+      <div class="section-body">
+        <div class="two-col">
+          <div>
+            <div class="label">Declaración y operaciones básicas</div>
+            <pre>string s = "hola";
+string vacio;                // == ""
+
+s.length();  s.size();       // cant. de caracteres
+s[0];                        // acceso como array: 'h'
+s.empty();                   // true si length()==0
+
+string t = s + " mundo";     // concatenar
+s += "!";                    // agregar al final</pre>
+            <div class="label" style="margin-top:2px">Entrada y recorrido</div>
+            <pre>cin &gt;&gt; s;             // una palabra (hasta espacio)
+getline(cin, s);       // línea completa
+for (char c : s) cout &lt;&lt; c;  // recorrido</pre>
           </div>
           <div>
-            <div class="label">Reglas críticas</div>
-            <table>
-              <tr><th>new</th><th>debe tener su</th><th>delete</th></tr>
-              <tr><td><code>new T</code></td><td>→</td><td><code>delete p</code></td></tr>
-              <tr><td><code>new T[n]</code></td><td>→</td><td><code>delete[] p</code></td></tr>
-            </table>
-            <div class="note" style="margin-top:4px">
-              <b>Memory leak:</b> olvidar el <code>delete</code>. La memoria queda ocupada hasta que termina el programa.<br><br>
-              <b>Doble free:</b> llamar <code>delete</code> dos veces sobre el mismo puntero → comportamiento indefinido.<br><br>
-              <b>Dangling pointer:</b> usar el puntero después de <code>delete</code>. Asignar <code>nullptr</code> después de liberar ayuda a detectarlo.
-            </div>
+            <div class="label">Comparación, búsqueda y substrings</div>
+            <pre>s == "hola";   s != "chau";  // comparación
+s &lt; t;                       // orden lexicográfico
+
+s.substr(0, 4);   // "hola" (desde 0, 4 caract.)
+s.substr(1);      // desde índice 1 hasta el final
+
+s.find("mun");    // índice donde empieza, o
+                   // string::npos si no está</pre>
+            <div class="label" style="margin-top:2px">Conversión</div>
+            <pre>to_string(42);               // int → string
+stoi("42");  stod("3.14");   // string → número</pre>
+            <div class="note" style="margin-top:1px"><code>string::npos</code> = valor devuelto por <code>find</code> cuando no se encontró la subcadena.</div>
           </div>
         </div>
       </div>
@@ -828,282 +541,7 @@ n = nullptr;</pre>
 
   <div class="page-footer">
     <span>Algoritmos y Estructuras de Datos · C++ · Referencia Rápida</span>
-    <span>Hoja 2 · Frente (Cara C)</span>
-  </div>
-</div>
-
-
-<!-- ════════════════════════════════════════════════════
-     CARA D — Structs · Templates · Archivos · .h/.cpp
-════════════════════════════════════════════════════ -->
-<div class="page">
-  <div class="page-header" style="--accent-color:var(--a6)">
-    <h1>C++ · Referencia Rápida</h1>
-    <span class="subtitle">Cara D — Structs · Templates · Entrada/Salida de archivos · Organización en .h / .cpp</span>
-    <span class="page-tag">HOJA 2 · DORSO</span>
-  </div>
-
-  <div class="cols">
-
-    <!-- STRUCTS -->
-    <div class="section col-span-2">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a6)"></div>
-        <div>
-          <div class="section-eyebrow">Tipos compuestos</div>
-          <div class="section-title">Structs</div>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="two-col">
-          <div>
-            <div class="label">Definición y uso básico</div>
-            <pre>struct Punto {
-  double x;
-  double y;
-};
-
-Punto p;
-p.x = 3.0;  p.y = 4.0;
-
-// Inicialización directa
-Punto q = {1.0, 2.0};
-
-// Array de structs
-Punto nube[100];
-nube[0].x = 0.5;</pre>
-            <div class="label" style="margin-top:3px">Pasar a funciones</div>
-            <pre>// Por valor: copia el struct completo
-double norma(Punto p) {
-  return sqrt(p.x*p.x + p.y*p.y);
-}
-// Por referencia: más eficiente
-void mover(Punto& p, double dx) {
-  p.x += dx;
-}</pre>
-          </div>
-          <div>
-            <div class="label">Struct con puntero propio (nodo)</div>
-            <pre>struct Nodo {
-  int   dato;
-  Nodo* siguiente;  // apunta al mismo tipo
-};
-
-// Crear nodo en heap
-Nodo* n = new Nodo;
-n->dato      = 5;
-n->siguiente = nullptr;
-
-// Encadenar dos nodos
-Nodo* a = new Nodo;  a->dato = 1;
-Nodo* b = new Nodo;  b->dato = 2;
-a->siguiente = b;
-b->siguiente = nullptr;
-
-// Recorrer
-Nodo* cur = a;
-while (cur != nullptr) {
-  cout &lt;&lt; cur->dato &lt;&lt; " ";
-  cur = cur->siguiente;
-}</pre>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TEMPLATES -->
-    <div class="section col-span-2">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a7)"></div>
-        <div>
-          <div class="section-eyebrow">Genericidad</div>
-          <div class="section-title">Templates</div>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="two-col">
-          <div>
-            <div class="label">Función genérica</div>
-            <pre>template &lt;typename T&gt;
-T maximo(T a, T b) {
-  return (a > b) ? a : b;
-}
-
-// El tipo se deduce en la llamada
-int    m1 = maximo(3, 7);
-double m2 = maximo(1.5, 2.3);
-// O explícitamente:
-int    m3 = maximo&lt;int&gt;(3, 7);</pre>
-            <div class="label" style="margin-top:3px">Múltiples parámetros de tipo</div>
-            <pre>template &lt;typename T, typename U&gt;
-void imprimir_par(T a, U b) {
-  cout &lt;&lt; a &lt;&lt; ", " &lt;&lt; b &lt;&lt; endl;
-}</pre>
-          </div>
-          <div>
-            <div class="label">Struct genérico</div>
-            <pre>template &lt;typename T&gt;
-struct Nodo {
-  T     dato;
-  Nodo* siguiente;
-};
-
-// Instanciación — tipo entre &lt;&gt;
-Nodo&lt;int&gt;*    n1 = new Nodo&lt;int&gt;;
-Nodo&lt;double&gt;* n2 = new Nodo&lt;double&gt;;
-
-n1->dato = 42;
-n2->dato = 3.14;</pre>
-            <div class="note" style="margin-top:4px">El compilador genera una versión del código para cada tipo con el que se usa el template. El tipo debe soportar las operaciones usadas dentro (p. ej. <code>&gt;</code> para <code>maximo</code>).</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ARCHIVOS -->
-    <div class="section col-span-2">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a8)"></div>
-        <div>
-          <div class="section-eyebrow">#include &lt;fstream&gt;</div>
-          <div class="section-title">Entrada / Salida de archivos</div>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="two-col">
-          <div>
-            <div class="label">Leer desde archivo</div>
-            <pre>ifstream arch("datos.txt");
-
-// Verificar apertura
-if (!arch) {
-  cerr &lt;&lt; "Error al abrir";
-  return 1;
-}
-
-// Leer valor por valor
-int x;
-while (arch &gt;&gt; x) {
-  cout &lt;&lt; x &lt;&lt; "\n";
-}
-
-// Leer línea por línea
-string linea;
-while (getline(arch, linea)) {
-  cout &lt;&lt; linea &lt;&lt; "\n";
-}
-
-arch.close();</pre>
-          </div>
-          <div>
-            <div class="label">Escribir en archivo</div>
-            <pre>ofstream salida("resultado.txt");
-
-if (!salida) { /* error */ }
-
-salida &lt;&lt; "resultado: " &lt;&lt; 42 &lt;&lt; "\n";
-salida &lt;&lt; 3.14 &lt;&lt; endl;
-
-salida.close();</pre>
-            <div class="label" style="margin-top:4px">Lectura y escritura</div>
-            <pre>fstream arch("datos.txt",
-             ios::in | ios::out);</pre>
-            <table style="margin-top:3px">
-              <tr><th>Clase</th><th>Operación</th></tr>
-              <tr><td><code>ifstream</code></td><td>solo lectura</td></tr>
-              <tr><td><code>ofstream</code></td><td>solo escritura</td></tr>
-              <tr><td><code>fstream</code></td><td>lectura y escritura</td></tr>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ORGANIZACION .h / .cpp -->
-    <div class="section col-span-2">
-      <div class="section-header">
-        <div class="section-accent" style="background:var(--a1)"></div>
-        <div>
-          <div class="section-eyebrow">Proyecto multi-archivo</div>
-          <div class="section-title">Organización en .h / .cpp</div>
-        </div>
-      </div>
-      <div class="section-body">
-        <div class="two-col" style="grid-template-columns: 1fr 1fr 1fr; gap:6px;">
-          <div>
-            <div class="label">lista.h — interfaz pública</div>
-            <pre>// Include guard:
-// evita doble inclusión
-#ifndef LISTA_H
-#define LISTA_H
-
-struct Nodo {
-  int   dato;
-  Nodo* sig;
-};
-
-// Solo declaraciones
-void insertar(Nodo*& cab, int d);
-void imprimir(Nodo* cab);
-void liberar(Nodo*& cab);
-
-#endif // LISTA_H</pre>
-          </div>
-          <div>
-            <div class="label">lista.cpp — implementación</div>
-            <pre>#include "lista.h"
-#include &lt;iostream&gt;
-using namespace std;
-
-void insertar(Nodo*& cab, int d) {
-  Nodo* n = new Nodo;
-  n->dato = d;
-  n->sig  = cab;
-  cab     = n;
-}
-void imprimir(Nodo* cab) {
-  while (cab) {
-    cout &lt;&lt; cab->dato &lt;&lt; " ";
-    cab = cab->sig;
-  }
-}
-void liberar(Nodo*& cab) {
-  while (cab) {
-    Nodo* tmp = cab;
-    cab = cab->sig;
-    delete tmp;
-  }
-}</pre>
-          </div>
-          <div>
-            <div class="label">main.cpp</div>
-            <pre>#include "lista.h"
-#include &lt;iostream&gt;
-using namespace std;
-
-int main() {
-  Nodo* lista = nullptr;
-  insertar(lista, 10);
-  insertar(lista, 20);
-  insertar(lista, 30);
-  imprimir(lista);
-  liberar(lista);
-  return 0;
-}</pre>
-            <div class="label" style="margin-top:4px">Compilar</div>
-            <pre>g++ main.cpp lista.cpp -o prog
-./prog</pre>
-            <div class="note" style="margin-top:3px">El <code>.h</code> define <em>qué</em> existe. El <code>.cpp</code> define <em>cómo</em> funciona. El <code>main.cpp</code> solo usa el <code>.h</code>, no necesita saber la implementación.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="page-footer">
-    <span>Algoritmos y Estructuras de Datos · C++ · Referencia Rápida</span>
-    <span>Hoja 2 · Dorso (Cara D)</span>
+    <span>Cara B</span>
   </div>
 </div>
 
