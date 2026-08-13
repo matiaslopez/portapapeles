@@ -272,8 +272,8 @@ int i = atoi("42"); double f = atof("3.14");</pre>
               <tr><td class="mono">%</td><td>módulo (resto)</td></tr>
             </table>
             <div class="label" style="margin-top:2px">Incremento y asignación compuesta</div>
-            <pre>x++;  ++x;   // post- / pre-incremento (x = x+1)
-x--;  --x;   // post- / pre-decremento (x = x-1)
+            <pre>x++;   // equivale a x = x + 1
+x--;   // equivale a x = x - 1
 x+=5; x-=2; x*=3; x/=4; x%=2;</pre>
             <div class="label" style="margin-top:2px">División entera vs. real</div>
             <pre>7 / 2      // → 3   (int ÷ int, trunca)
@@ -349,15 +349,13 @@ while (cin &gt;&gt; x) { }  // hasta EOF</pre>
         <div class="three-col">
           <div>
             <div class="label">Estructura básica</div>
-            <pre>// Prototipo (si se usa antes de definir)
-int suma(int a, int b);
-
+            <pre>#include &lt;iostream&gt;
+using namespace std;      // evita escribir std::
+int suma(int a, int b);   // prototipo
 int suma(int a, int b) { return a+b; }
-
 void saludar(string nombre) {
   cout &lt;&lt; "Hola " &lt;&lt; nombre;
 }
-
 int r = suma(3, 4);   // r = 7
 saludar("Ana");</pre>
           </div>
